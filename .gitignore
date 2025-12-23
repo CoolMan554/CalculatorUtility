@@ -15,3 +15,10 @@ build/
 # IDE files
 .vscode/
 .idea/
+
+#Object Files (cpp)
+*.o
+*.out
+
+#library
+*.a
