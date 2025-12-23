@@ -1,0 +1,4 @@
+# Inherit from the Google style guide
+BasedOnStyle: Google
+# Override the indent width
+IndentWidth: 2

@@ -23,3 +23,19 @@ install(TARGETS calculator_utility
         LIBRARY DESTINATION /usr/local/lib/
         RUNTIME DESTINATION /usr/local/bin/
 )
+
+#clang-format
+find_program(CLANG_FORMAT_EXE  clang-format)
+get_target_property(target_sources calculator_utility SOURCES)
+
+if(CLANG_FORMAT_EXE)
+  add_custom_target(format 
+    COMMENT "Formatting files with clang-format..." 
+    COMMAND ${CLANG_FORMAT_EXE} -i ${target_sources}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  )
+  message(STATUS "Added 'format' target") 
+else() 
+  message(WARNING
+    "clang-format not found - format target unavailable") 
+endif()
