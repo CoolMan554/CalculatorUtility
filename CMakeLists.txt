@@ -17,3 +17,9 @@ target_include_directories(calculator_utility
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/lib
 )
+
+install(TARGETS calculator_utility
+        ARCHIVE DESTINATION /usr/local/lib/
+        LIBRARY DESTINATION /usr/local/lib/
+        RUNTIME DESTINATION /usr/local/bin/
+)

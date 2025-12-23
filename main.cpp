@@ -23,12 +23,12 @@ void print_help(const char* progName)
     cout << "    !   factorial (recursive implementation)\n\n";
 
     cout << "Examples:\n";
-    cout << "  " << progName << " 3 + 5       -> 8\n";
-    cout << "  " << progName << " 8 - 3       -> 5\n";
-    cout << "  " << progName << " 20 \\* 2      -> 40\n";
-    cout << "  " << progName << " 10 / 2      -> 5\n";
-    cout << "  " << progName << " 2 ^ 8       -> 256\n";
-    cout << "  " << progName << " 5 !         -> 120\n\n";
+    cout << "  " << progName << " 3 + 5       \t-> Result: 8\n";
+    cout << "  " << progName << " 8 - 3       \t-> Result: 5\n";
+    cout << "  " << progName << " 20 \\* 2    \t-> Result: 40\n";
+    cout << "  " << progName << " 10 / 2      \t-> Result: 5\n";
+    cout << "  " << progName << " 2 ^ 8       \t-> Result: 256\n";
+    cout << "  " << progName << " 5 !         \t-> Result: 120\n\n";
 
     cout << "Options:\n";
     cout << "  -h, --help    Show this help message and exit\n";
@@ -38,6 +38,12 @@ int main(int argc, char** argv)
 {
     try
     {
+        if(argc < 2)
+        {
+            std::cout << "There are not enough arguments to get the result! For more information, enter --help" << std::endl;
+            return 1;
+        }
+
         if(argc == 2 && (string(argv[1]) == "--help" || string(argv[1]) == "-h"))
         {
             print_help(argv[0]);
