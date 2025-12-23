@@ -25,7 +25,7 @@ install(TARGETS calculator_utility
 )
 
 #clang-format
-find_program(CLANG_FORMAT_EXE  clang-format)
+find_program(CLANG_FORMAT_EXE "clang-format")
 get_target_property(target_sources calculator_utility SOURCES)
 
 if(CLANG_FORMAT_EXE)
@@ -38,4 +38,16 @@ if(CLANG_FORMAT_EXE)
 else() 
   message(WARNING
     "clang-format not found - format target unavailable") 
+endif()
+
+#clang-tidy
+find_program(CLANG_TIDY_EXE "clang-tidy")
+
+if(CLANG_TIDY_EXE)
+    message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
+    set_target_properties(calculator_utility PROPERTIES 
+        CXX_CLANG_TIDY
+        "${CLANG_TIDY_EXE};-p=${CMAKE_BINARY_DIR}")
+else()
+    message(WARNING "clang-tidy not found!")
 endif()
