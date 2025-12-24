@@ -22,12 +22,12 @@ namespace library_math
         return num1 / num2;
     }
 
-    int exponentiation(int num, int degree)
+    double exponentiation(double num, double degree)
     {
         if(degree == 0)
             return 1;
 
-        int res = num;     
+        double res = num;     
         for(int i = 0; i < degree; i++)
         {
             res *= num;
@@ -35,7 +35,7 @@ namespace library_math
         return res;
     }
 
-    int factorial(int num)
+    double factorial(double num)
     {
         if(num == 0)
             return 1;

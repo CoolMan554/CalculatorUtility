@@ -10,7 +10,7 @@ namespace library_math
 
     double division(double num1, double num2);
 
-    int exponentiation(int num, int degree);
+    double exponentiation(double num, double degree);
 
-    int factorial(int num);
+    double factorial(double num);
 }
