@@ -16,9 +16,14 @@ Description:
     !   factorial (recursive implementation)
 
 Examples:
-  calculator_utility 3 + 5              -> Result: 8
-  calculator_utility 8 - 3              -> Result: 5
-  calculator_utility 20 \* 2            -> Result: 40
-  calculator_utility 10 / 2             -> Result: 5
-  calculator_utility 2 ^ 8              -> Result: 256
-  calculator_utility 5 !                -> Result: 120
+calculator_utility 3 + 5 -> Result: 8
+
+calculator_utility 8 - 3 -> Result: 5
+
+calculator_utility 20 \* 2  -> Result: 40
+
+calculator_utility 10 / 2   -> Result: 5
+
+calculator_utility 2 ^ 8    -> Result: 256
+
+calculator_utility 5 !      -> Result: 120
