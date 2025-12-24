@@ -1,12 +1,12 @@
 # CalculatorUtility
 Calculator CLI Utility — Help
 
-Usage:
+# Usage:
   calculator_utility <number1> <operation> <number2>
   calculator_utility <number> <operation>
   calculator_utility --help | -h
 
-Description:
+# Description:
   A simple command-line calculator that performs:
     +   addition
     -   subtraction
@@ -15,7 +15,7 @@ Description:
     ^   power (iterative implementation)
     !   factorial (recursive implementation)
 
-Examples:
+# Examples:
 calculator_utility 3 + 5 -> Result: 8
 
 calculator_utility 8 - 3 -> Result: 5
