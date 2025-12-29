@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
         if (argc < 2) {
             std::cout << "There are not enough arguments to get the result! For more "
                          "information, enter --help"
-                      << std::endl;
+                      << "\n";
             return 1;
         }
 
@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
 
         // Если больше 4-х аргументов, то не обрабатываем
         if (argc > 4) {
-            std::cout << "There are not enough arguments to get the result!" << std::endl;
+            std::cout << "There are not enough arguments to get the result!" << "\n";
             return 1;
         }
 
@@ -62,12 +62,13 @@ int main(int argc, char **argv) {
         double num2 = 0.0;
 
         // Для факториала не вычисляем второе число
-        if (*operation != '!')
+        if (*operation != '!') {
             num2 = std::stod(argv[3]);
+        }
 
         // На ноль делить нельзя
         if (*operation == '/' && num2 == 0.0) {
-            std::cout << "You can't divided by zero!" << std::endl;
+            std::cout << "You can't divided by zero!" << "\n";
             return 1;
         }
 
@@ -91,11 +92,11 @@ int main(int argc, char **argv) {
             result = library_math::factorial(num1);
             break;
         default:
-            std::cout << "There is no such operation. Select another operation!" << std::endl;
+            std::cout << "There is no such operation. Select another operation!" << "\n";
             return 1;
         }
 
-        std::cout << "Result: " << result << std::endl;
+        std::cout << "Result: " << result << "\n";
     } catch (const std::exception &ex) {
         std::cout << "Error: " << ex.what();
     }
