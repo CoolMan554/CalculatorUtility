@@ -1,8 +1,18 @@
 cmake_minimum_required(VERSION 3.5)
 
+include(FetchContent)
+
 project(calculator_utility)
 
-add_subdirectory(lib)
+FetchContent_Declare(
+        libMath
+        GIT_REPOSITORY https://github.com/CoolMan554/LibCalculatorUtility.git
+        GIT_TAG v0.1.1
+)
+
+FetchContent_MakeAvailable(
+        libMath
+)
 
 add_executable(calculator_utility
         main.cpp            
@@ -10,12 +20,7 @@ add_executable(calculator_utility
 
 target_link_libraries(calculator_utility
         PRIVATE
-        math
-)
-
-target_include_directories(calculator_utility
-        PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/lib
+        libMath
 )
 
 install(TARGETS calculator_utility
