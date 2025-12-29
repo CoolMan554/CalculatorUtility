@@ -1,29 +1,47 @@
 # CalculatorUtility
-Calculator CLI Utility — Help
+CalculatorUtility - консольная утилита-калькулятор
 
-# Usage:
-  calculator_utility <number1> <operation> <number2>
-  calculator_utility <number> <operation>
-  calculator_utility --help | -h
+# Возможности
 
-# Description:
-  A simple command-line calculator that performs:
-    +   addition
-    -   subtraction
-    \*, '*' , *  multiplication
-    /   division (checks for divide by zero)
-    ^   power (iterative implementation)
-    !   factorial (recursive implementation)
+Утилита поддерживает следующие операции:
 
-# Examples:
-calculator_utility 3 + 5 -> Result: 8
++ — сложение
 
-calculator_utility 8 - 3 -> Result: 5
+- — вычитание
 
-calculator_utility 20 \* 2  -> Result: 40
+"\*", '\*', \* — умножение
 
-calculator_utility 10 / 2   -> Result: 5
+/ — деление (с проверкой деления на ноль)
 
-calculator_utility 2 ^ 8    -> Result: 256
+^ — возведение в степень (итеративная реализация)
 
-calculator_utility 5 !      -> Result: 120
+! — факториал (рекурсивная реализация, только для целых неотрицательных чисел)
+
+# Сборка
+
+Сборка выполняется с использованием CMake.
+
+# Требования
+
+CMake ≥ 3.5
+
+Компилятор C++ (g++, clang++)
+
+Linux
+
+# Команды сборки:
+
+`cmake -B build` - конфигурация проекта и проверка сборки
+
+`cmake --build build` - основная сборка
+
+`sudo cmake --build build --target install` - установка бинарного файла в систему
+
+После установки бинарный файл доступен по пути: `/usr/local/bin/`
+
+# Использование
+ `calculator_utility <number1> <operation> <number2>`
+  
+  `calculator_utility <number> <operation>`
+  
+  `calculator_utility --help | -h`
