@@ -40,8 +40,12 @@ Linux
 После установки бинарный файл доступен по пути: `/usr/local/bin/`
 
 # Использование
- `calculator_utility <number1> <operation> <number2>`
+  `calculator_utility <number1> <operation> <number2>`
   
-  `calculator_utility <number> <operation>`
+  `calculator_utility  -a20 -o/ -b30`
+
+  `calculator_utility  --arg1=20 --operation=/ --arg2=30`
+
+  `calculator_utility  --arg1=20 --operation=!`
   
   `calculator_utility --help | -h`
