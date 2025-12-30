@@ -27,7 +27,7 @@ target_compile_options(calculator_utility PRIVATE
 FetchContent_Declare(
         math
         GIT_REPOSITORY https://github.com/CoolMan554/LibCalculatorUtility.git
-        GIT_TAG v0.1.2
+        GIT_TAG v0.1.3
 )
 
 FetchContent_MakeAvailable(
