@@ -1,15 +1,31 @@
 #include <iostream>
 #include <string>
+#include <getopt.h>
 
 #include "library_math.h"
 
 using namespace std;
 
+struct CalculateInfo
+{
+    std::string first_arg;    
+    std::string operation;
+    std::string second_arg;
+};
+
+static option long_opts[] = {
+    {"help", no_argument, nullptr, 'h'},
+    {"arg1", required_argument, nullptr, 'a'},
+    {"arg2", optional_argument, nullptr, 'b'},
+    {"operation", required_argument, nullptr, 'o'}
+};
+
 void print_help(const char *progName) {
     cout << "Calculator CLI Utility — Help\n\n";
     cout << "Usage:\n";
-    cout << "  " << progName << " <number1> <operation> <number2>\n";
-    cout << "  " << progName << " <number> <operation>\n";
+    cout << "  " << progName << " -a 20 -o / -b 30\n";
+    cout << "  " << progName << " --arg1=20 --operation=/ --arg2=30\n";
+    cout << "  " << progName << " --arg1=20 --operation=! \n";
     cout << "  " << progName << " --help | -h\n\n";
 
     cout << "Description:\n";
@@ -24,80 +40,138 @@ void print_help(const char *progName) {
     cout << "    !   factorial (recursive implementation)\n\n";
 
     cout << "Examples:\n";
-    cout << "  " << progName << " 3 + 5       \t-> Result: 8\n";
-    cout << "  " << progName << " 8 - 3       \t-> Result: 5\n";
-    cout << "  " << progName << " 20 \\* 2    \t-> Result: 40\n";
-    cout << "  " << progName << " 10 / 2      \t-> Result: 5\n";
-    cout << "  " << progName << " 2 ^ 8       \t-> Result: 256\n";
-    cout << "  " << progName << " 5 !         \t-> Result: 120\n\n";
+    cout << "  " << progName << " \t--arg1=3 --operation=+ --arg2=5       \t-> Result: 8\n";
+    cout << "  " << progName << " \t--arg1=8 --operation=- --arg2=3       \t-> Result: 5\n";
+    cout << "  " << progName << " \t--arg1=20 --operation=\\* --arg2=2    \t-> Result: 40\n";
+    cout << "  " << progName << " \t--arg1=10 --operation=/ --arg2=2      \t-> Result: 5\n";
+    cout << "  " << progName << " \t--arg1=2 --operation=^ --arg2=8       \t-> Result: 256\n";
+    cout << "  " << progName << " \t--arg1=5 --operation=!         \t-> Result: 120\n\n";
 
     cout << "Options:\n";
     cout << "  -h, --help    Show this help message and exit\n";
 }
 
-int main(int argc, char **argv) {
-    try {
-        if (argc < 2) {
-            std::cout << "There are not enough arguments to get the result! For more "
-                         "information, enter --help"
-                      << "\n";
-            return 1;
-        }
+CalculateInfo parsing(int argc, char **argv)
+{
+    CalculateInfo info;
 
-        if (argc == 2 && (string(argv[1]) == "--help" || string(argv[1]) == "-h")) {
-            print_help(argv[0]);
-            return 0;
-        }
+    int opt;
 
-        // Если больше 4-х аргументов, то не обрабатываем
-        if (argc > 4) {
-            std::cout << "There are not enough arguments to get the result!" << "\n";
-            return 1;
-        }
-
-        double result = 0.0;
-
-        double num1 = std::stod(argv[1]);
-        const char *operation = argv[2];
-        double num2 = 0.0;
-
-        // Для факториала не вычисляем второе число
-        if (*operation != '!') {
-            num2 = std::stod(argv[3]);
-        }
-
-        // На ноль делить нельзя
-        if (*operation == '/' && num2 == 0.0) {
-            std::cout << "You can't divided by zero!" << "\n";
-            return 1;
-        }
-
-        switch (*operation) {
-        case '+':
-            result = library_math::sum(num1, num2);
+    while ((opt = getopt_long(argc, argv, "ha:b:o:", long_opts, nullptr)) != -1){
+        switch(opt)
+        {
+            case 'h':
+                print_help(argv[0]);
             break;
-        case '-':
-            result = library_math::minus(num1, num2);
+            case 'a':
+            if(optarg != nullptr) {
+                info.first_arg = optarg;   
+            }     
             break;
-        case '*':
-            result = library_math::multiplication(num1, num2);
+            case 'o':
+            if(optarg != nullptr) {
+                info.operation = optarg;        
+            }
             break;
-        case '/':
-            result = library_math::division(num1, num2);
+            case 'b':
+            if(optarg != nullptr) {
+                info.second_arg = optarg;     
+            }   
             break;
-        case '^':
-            result = library_math::exponentiation(num1, num2);
+            case '?':
+                std::cout << "The argument value is missing!" << std::endl;
             break;
-        case '!':
-            result = library_math::factorial(num1);
-            break;
-        default:
-            std::cout << "There is no such operation. Select another operation!" << "\n";
-            return 1;
+            default:
+                std::cout << "There is no such operation!" << std::endl;
         }
-
-        std::cout << "Result: " << result << "\n";
-    } catch (const std::exception &ex) {
-        std::cout << "Error: " << ex.what();
     }
+
+    return info;
+}
+
+int checker(const CalculateInfo& info, std::string& error){
+
+    if(info.first_arg.empty()){
+        error = "The first argument is missing!";
+        return -1;
+    }
+
+    if(info.operation.empty()){
+        error = "The operation is missing!";
+        return -1;
+    }
+
+    if(info.operation != "!" && info.second_arg.empty()){
+        error = "The second argument is missing!";
+        return -1;
+    }
+
+    // На ноль делить нельзя
+    if (info.operation == "/" && info.second_arg == "0") {
+        error = "You can't divided by zero!";
+        return -1;
+    }
+
+    return 0;
+}
+
+double calculate(const CalculateInfo& info, std::string& error){
+
+    double result = 0.0;
+    int op = std::stoi(info.operation);
+    double num1 = std::stod(info.first_arg);
+    double num2 = 0.0;
+    if (op != '!') {
+        num2 = std::stod(info.second_arg);
+    }
+
+    switch (op) {
+    case '+':
+        result = library_math::sum(num1, num2);
+        break;
+    case '-':
+        result = library_math::minus(num1, num2);
+        break;
+    case '*':
+        result = library_math::multiplication(num1, num2);
+        break;
+    case '/':
+        result = library_math::division(num1, num2);
+        break;
+    case '^':
+        result = library_math::exponentiation(num1, num2);
+        break;
+    case '!':
+        result = static_cast<int>(library_math::factorial(static_cast<int>(num1)));
+        break;
+    default:
+        error = "There is no such operation. Select another operation!";
+    }
+
+    return result;
+}
+
+void print(double result) {
+    std::cout << "Result: " << result << "\n";
+}
+
+int main(int argc, char **argv) {
+
+    CalculateInfo info = parsing(argc, argv);
+
+    std::string error_msg;
+
+    if (checker(info, error_msg) == -1){
+        std::cout << error_msg << "\n";
+        return -1;
+    }
+
+    double result = calculate(info, error_msg);
+
+    if (!error_msg.empty()){
+        std::cout << error_msg << "\n";
+        return -1;
+    }
+
+    print(result);
 }
