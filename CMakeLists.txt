@@ -1,11 +1,13 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.11)
 
 include(FetchContent)
 
 project(calculator_utility VERSION 1.0)
 
 add_executable(calculator_utility
-        main.cpp            
+        main.cpp
+        CalculatorManager.h
+        CalculatorManager.cpp        
 )
 
 # C++ standard (add --std=c++17)
@@ -38,6 +40,12 @@ target_link_libraries(calculator_utility
         PRIVATE
         math
 )
+
+#library json
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz)
+FetchContent_MakeAvailable(json)
+
+target_link_libraries(calculator_utility PRIVATE nlohmann_json::nlohmann_json)
 
 install(TARGETS calculator_utility
         ARCHIVE DESTINATION /usr/local/lib/
