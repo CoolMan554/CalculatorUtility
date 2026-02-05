@@ -7,8 +7,8 @@ int main(int argc, char **argv)
         CalculatorManager info;
         info.runner(argc, argv);
     }
-    catch(const std::exception& e)
+    catch(const std::exception& ex)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << ex.what() << '\n';
     }
 }
