@@ -11,9 +11,6 @@ void CalculatorManager::runner(int argc, char **argv)
 {
     parser(argc, argv);
 
-    if(help_check)
-        return;
-
     checker();
 
     calculator();
@@ -48,6 +45,13 @@ void CalculatorManager::parser(int argc, char **argv)
 
 void CalculatorManager::checker()
 {
+    if(help_check)
+        exit(0);
+
+    if (j_parser.empty()) {
+        throw std::runtime_error("There is no input data in JSON format!");
+    }
+
     if (!j_parser.contains("arg1") && j_parser["arg1"].empty()) {
         throw std::runtime_error("The first argument is missing!");
     }
@@ -60,7 +64,7 @@ void CalculatorManager::checker()
 
     operation = j_parser.at("operation").get<string>();
 
-    if (operation != "!" && j_parser.contains("arg2") && j_parser["arg2"].empty()) {
+    if (operation != "!" && !j_parser.contains("arg2") && j_parser["arg2"].empty()) {
         throw std::runtime_error("The second argument is missing!");
     }
 
