@@ -20,6 +20,12 @@ public:
     void calculator();
     void printer() const;
     void print_help(const char *progName) const;
+    bool get_help_check() const{
+        return help_check;
+    }
+    double get_result() const{
+        return result;
+    }
 private:
     double first_arg = 0.0;
     std::string operation;

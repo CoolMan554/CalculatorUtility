@@ -11,15 +11,21 @@ void CalculatorManager::runner(int argc, char **argv)
 {
     parser(argc, argv);
 
-    checker();
+    if (!help_check) {
+        checker();
 
-    calculator();
+        calculator();
 
-    printer();
+        printer();
+    }
 }
 
 void CalculatorManager::parser(int argc, char **argv)
 {
+    //Resetting the counter
+    optind = 1;
+    opterr = 1;
+
     int opt;
 
     while ((opt = getopt_long(argc, argv, "hi:", long_opts, nullptr)) != -1) {
@@ -45,9 +51,6 @@ void CalculatorManager::parser(int argc, char **argv)
 
 void CalculatorManager::checker()
 {
-    if(help_check)
-        exit(0);
-
     if (j_parser.empty()) {
         throw std::runtime_error("There is no input data in JSON format!");
     }
