@@ -1,5 +1,5 @@
 # CalculatorUtility
-CalculatorUtility - консольная утилита-калькулятор
+CalculatorUtility - консольная утилита-калькулятор. Принимаем входные данные в формате JSON
 
 # Возможности
 
@@ -40,8 +40,8 @@ Linux
 После установки бинарный файл доступен по пути: `/usr/local/bin/`
 
 # Использование
- `calculator_utility <number1> <operation> <number2>`
+ `calculator_utility --in | -i '{"arg1": <number1>, "operation": "<operation>", "arg2": "<number2>"}'`
   
-  `calculator_utility <number> <operation>`
+  `calculator_utility --in | -i '{"arg1": <number1>, "operation": "<operation>"}'`
   
   `calculator_utility --help | -h`
