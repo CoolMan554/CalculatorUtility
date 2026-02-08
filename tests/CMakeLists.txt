@@ -5,7 +5,7 @@ include(FetchContent)
 project(g_tests VERSION 1.0)
 
 add_executable(g_tests
-        CalculatorManager_test.cpp
+        utest_CalculatorManager.cpp
 )
 
 # GoogleTest library

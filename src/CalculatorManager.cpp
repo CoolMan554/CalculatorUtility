@@ -1,149 +1,148 @@
 #include <fstream>
 
 #include "CalculatorManager.h"
-#include "library_math.h"
 #include "Logger.h"
+#include "library_math.h"
 
-CalculatorManager::CalculatorManager(){
+void CalculatorManager::run(int argc, char **argv) {
+    parse_arguments(argc, argv);
 
-}
+    if (!help_check_) {
 
-void CalculatorManager::runner(int argc, char **argv)
-{
-    parser(argc, argv);
+        validate_input();
 
-    if (!help_check) {
-        checker();
+        calculate();
 
-        calculator();
-
-        printer();
+        print_result();
     }
 }
 
-void CalculatorManager::parser(int argc, char **argv)
-{
-    //Resetting the counter
+void CalculatorManager::parse_arguments(int argc, char **argv) {
+    // Resetting the counter
     optind = 1;
     opterr = 1;
 
     int opt;
 
-    while ((opt = getopt_long(argc, argv, "hi:", long_opts, nullptr)) != -1) {
+    while ((opt = getopt_long(argc, argv, "hi:", long_opts.data(), nullptr)) != -1) {
         switch (opt) {
         case 'h':
             print_help(argv[0]);
-            help_check = true;
+            help_check_ = true;
             break;
         case 'i':
             if (optarg != nullptr) {
                 std::string json_str = optarg;
-                j_parser = json::parse(json_str);
+                input_json_ = json::parse(json_str);
             }
             break;
         case '?':
             throw std::runtime_error("Function parser: The argument value is missing!");
             break;
         default:
-            throw std::runtime_error("Function parser: There is no such operation!");            
+            throw std::runtime_error("Function parser: There is no such operation!");
         }
     }
 
     Logger::instance().info("Parsing in JSON format was successful");
 }
 
-void CalculatorManager::checker()
-{
-    if (j_parser.empty()) {
+void CalculatorManager::validate_input() {
+    if (input_json_.empty()) {
         throw std::runtime_error("Function checker: There is no input data in JSON format!");
     }
 
-    if (!j_parser.contains("arg1") && j_parser["arg1"].empty()) {
+    if (!input_json_.contains("arg1") && input_json_["arg1"].empty()) {
         throw std::runtime_error("Function checker: The first argument is missing!");
     }
 
-    first_arg = j_parser.at("arg1").get<double>();
+    first_argument_ = input_json_.at("arg1").get<double>();
 
-    if (!j_parser.contains("operation") && j_parser["operation"].empty() && j_parser["operation"].size() > 1) {
-        throw std::runtime_error("Function checker: The operation is missing!");     
+    if (!input_json_.contains("operation") && input_json_["operation"].empty() &&
+        input_json_["operation"].size() > 1) {
+        throw std::runtime_error("Function checker: The operation is missing!");
     }
 
-    operation = j_parser.at("operation").get<string>();
+    operation_ = input_json_.at("operation").get<std::string>();
 
-    if (operation != "!" && !j_parser.contains("arg2") && j_parser["arg2"].empty()) {
+    if (operation_ != "!" && !input_json_.contains("arg2") && input_json_["arg2"].empty()) {
         throw std::runtime_error("Function checker: The second argument is missing!");
     }
 
-    if (operation != "!") {
-        second_arg = j_parser.at("arg2").get<double>();
+    if (operation_ != "!") {
+        second_argument_ = input_json_.at("arg2").get<double>();
     }
 
     // На ноль делить нельзя
-    if (operation == "/" && second_arg == 0.0) {
-        throw std::runtime_error("Function checker: You can't divided by zero!");        
+    if (operation_ == "/" && second_argument_ == 0.0) {
+        throw std::runtime_error("Function checker: You can't divided by zero!");
     }
 
     Logger::instance().info("The data verification was successful");
 }
 
-void CalculatorManager::calculator()
-{
-    switch (operation[0]) {
+void CalculatorManager::calculate() {
+    switch (operation_[0]) {
     case '+':
-        result = library_math::sum(first_arg, second_arg);
+        result_ = Library_Math::sum(first_argument_, second_argument_);
         break;
     case '-':
-        result = library_math::minus(first_arg, second_arg);
+        result_ = Library_Math::minus(first_argument_, second_argument_);
         break;
     case '*':
-        result = library_math::multiplication(first_arg, second_arg);
+        result_ = Library_Math::multiplication(first_argument_, second_argument_);
         break;
     case '/':
-        result = library_math::division(first_arg, second_arg);
+        result_ = Library_Math::division(first_argument_, second_argument_);
         break;
     case '^':
-        result = library_math::exponentiation(first_arg, second_arg);
+        result_ = Library_Math::exponentiation(first_argument_, second_argument_);
         break;
     case '!':
-        result = library_math::factorial(static_cast<int>(first_arg));
+        result_ = Library_Math::factorial(static_cast<int>(first_argument_));
         break;
     default:
-        throw std::runtime_error("Function calculator: There is no such operation. Select another operation!");
+        throw std::runtime_error(
+            "Function calculator: There is no such operation. Select another operation!");
     }
 
     Logger::instance().info("The calculation was successful");
 }
 
-void CalculatorManager::printer() const
-{
-    std::cout << "Result: " + to_string(result) << "\n";
+void CalculatorManager::print_result() const {
+    std::cout << "Result: " + std::to_string(result_) << "\n";
 }
 
-void CalculatorManager::print_help(const char *progName) const
-{
-    cout << "Calculator CLI Utility — Help\n\n";
-    cout << "Usage:\n";
-    cout << "  " << progName << " { \"arg1\": 20 \"operation\": \"/\" \"arg2\": 30 }\n";    
-    cout << "  " << progName << " { \"arg1\": 20 \"operation\": \"!\" }\n";    
-    cout << "  " << progName << " --help | -h\n\n";
+void CalculatorManager::print_help(const char *progName) const {
+    std::cout << "Calculator CLI Utility — Help\n\n";
+    std::cout << "Usage:\n";
+    std::cout << "  " << progName << " { \"arg1\": 20 \"operation\": \"/\" \"arg2\": 30 }\n";
+    std::cout << "  " << progName << " { \"arg1\": 20 \"operation\": \"!\" }\n";
+    std::cout << "  " << progName << " --help | -h\n\n";
 
-    cout << "Description:\n";
-    cout << "  A simple command-line calculator that performs:\n";
-    cout << "    +   addition\n";
-    cout << "    -   subtraction\n";
-    cout << "    *   multiplication\n";
-    cout << "    /   division (checks for divide by zero)\n";
-    cout << "    ^   power (iterative implementation)\n";
-    cout << "    !   factorial (recursive implementation)\n\n";
+    std::cout << "Description:\n";
+    std::cout << "  A simple command-line calculator that performs:\n";
+    std::cout << "    +   addition\n";
+    std::cout << "    -   subtraction\n";
+    std::cout << "    *   multiplication\n";
+    std::cout << "    /   division (checks for divide by zero)\n";
+    std::cout << "    ^   power (iterative implementation)\n";
+    std::cout << "    !   factorial (recursive implementation)\n\n";
 
-    cout << "Examples:\n";
-    cout << "  " << progName << " \t{ \"arg1\": 3 \"operation\": \"+\" \"arg2\": 5 }       \t-> Result: 8\n";
-    cout << "  " << progName << " \t{ \"arg1\": 3 \"operation\": \"-\" \"arg2\": 5 }       \t-> Result: 5\n";
-    cout << "  " << progName << " \t{ \"arg1\": 20 \"operation\": \"*\" \"arg2\": 2 }      \t-> Result: 40\n";
-    cout << "  " << progName << " \t{ \"arg1\": 10 \"operation\": \"/\" \"arg2\": 2 }      \t-> Result: 5\n";
-    cout << "  " << progName << " \t{ \"arg1\": 2 \"operation\": \"^\" \"arg2\": 2 }       \t-> Result: 4\n";
-    cout << "  " << progName << " \t{ \"arg1\": 5 \"operation\": \"!\"}                    \t-> Result: 120\n\n";
+    std::cout << "Examples:\n";
+    std::cout << "  " << progName
+              << " \t{ \"arg1\": 3 \"operation\": \"+\" \"arg2\": 5 }       \t-> Result: 8\n";
+    std::cout << "  " << progName
+              << " \t{ \"arg1\": 3 \"operation\": \"-\" \"arg2\": 5 }       \t-> Result: 5\n";
+    std::cout << "  " << progName
+              << " \t{ \"arg1\": 20 \"operation\": \"*\" \"arg2\": 2 }      \t-> Result: 40\n";
+    std::cout << "  " << progName
+              << " \t{ \"arg1\": 10 \"operation\": \"/\" \"arg2\": 2 }      \t-> Result: 5\n";
+    std::cout << "  " << progName
+              << " \t{ \"arg1\": 2 \"operation\": \"^\" \"arg2\": 2 }       \t-> Result: 4\n";
+    std::cout << "  " << progName
+              << " \t{ \"arg1\": 5 \"operation\": \"!\"}                    \t-> Result: 120\n\n";
 
-    cout << "Options:\n";
-    cout << "  -h, --help    Show this help message and exit\n";
+    std::cout << "Options:\n";
+    std::cout << "  -h, --help    Show this help message and exit\n";
 }

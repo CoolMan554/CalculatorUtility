@@ -1,43 +1,89 @@
 #pragma once
 
-#include <iostream>
-#include <string>
+#include <array>
 #include <getopt.h>
+#include <string>
 
 #include "nlohmann/json.hpp"
 
 // for convenience
 using json = nlohmann::json;
 
-using namespace std;
-
-class CalculatorManager
-{
-public:
-    CalculatorManager();
+/**
+ * @class CalculatorManager
+ * @brief Manages command-line parsing, validation, calculation and output.
+ */
+class CalculatorManager {
+  public:
+    CalculatorManager() = default;
     ~CalculatorManager() = default;
-    void runner(int argc, char **argv);
-    void parser(int argc, char **argv);
-    void checker();
-    void calculator();
-    void printer() const;
-    void print_help(const char *progName) const;
-    bool get_help_check() const{
-        return help_check;
+
+    /**
+     * @brief Entry point for program execution.
+     *
+     * @param argc Argument count
+     * @param argv Argument values
+     */
+    void run(int argc, char **argv);
+
+    /**
+     * @brief Returns whether help option was requested.
+     */
+    [[nodiscard]] bool get_help_check() const {
+        return help_check_;
     }
-    double get_result() const{
-        return result;
+
+    /**
+     * @brief Returns calculation result.
+     */
+    [[nodiscard]] double result() const {
+        return result_;
     }
-private:
-    double first_arg = 0.0;
-    std::string operation;
-    double second_arg = 0.0;
-    bool help_check = false;
-    double result = 0.0;
-    json j_parser;
-    
-    static constexpr option long_opts[] = {
-        {"help",      no_argument,       nullptr, 'h'},        
-        {"in",        required_argument, nullptr, 'i'},
-    };
+
+  private:
+    /**
+     * @brief Parses command-line arguments.
+     *
+     * @throws std::runtime_error if arguments are invalid
+     */
+    void parse_arguments(int argc, char **argv);
+
+    /**
+     * @brief Validates parsed input data.
+     *
+     * @throws std::runtime_error if validation fails
+     */
+    void validate_input();
+
+    /**
+     * @brief Performs calculation based on parsed input.
+     */
+    void calculate();
+
+    /**
+     * @brief Prints calculation result to stdout.
+     */
+    void print_result() const;
+
+    /**
+     * @brief Prints help message.
+     *
+     * @param program_name Name of executable
+     */
+    void print_help(const char *program_name) const;
+
+    double first_argument_{0.0};
+    double second_argument_{0.0};
+
+    std::string operation_;
+
+    bool help_check_{false};
+    double result_{0.0};
+
+    json input_json_;
+
+    // ===== CLI options =====
+    static constexpr std::array<option, 3> long_opts = {{{"help", no_argument, nullptr, 'h'},
+                                                         {"in", required_argument, nullptr, 'i'},
+                                                         {nullptr, 0, nullptr, 0}}};
 };

@@ -32,13 +32,13 @@ target_compile_options(calculator_core PRIVATE
 
 # static library
 FetchContent_Declare(
-        math
+        library_math
         GIT_REPOSITORY https://github.com/CoolMan554/LibCalculatorUtility.git
-        GIT_TAG v0.1.3
+        GIT_TAG v.0.1.4
 )
 
 FetchContent_MakeAvailable(
-        math
+        library_math
 )
 
 # library json
@@ -63,7 +63,7 @@ FetchContent_MakeAvailable(
 
 target_link_libraries(calculator_core 
         PUBLIC
-        math
+        library_math
         nlohmann_json::nlohmann_json
         spdlog::spdlog
 )
@@ -103,7 +103,7 @@ if(ENABLE_CLANG_FORMAT)
                 )
                 message(STATUS "Added 'format' target")
         else() 
-                essage(WARNING
+                message(WARNING
                 "clang-format not found - format target unavailable") 
         endif()
 endif()
