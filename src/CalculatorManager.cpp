@@ -116,8 +116,8 @@ void CalculatorManager::print_result() const {
 void CalculatorManager::print_help(const char *progName) const {
     std::cout << "Calculator CLI Utility — Help\n\n";
     std::cout << "Usage:\n";
-    std::cout << "  " << progName << " { \"arg1\": 20 \"operation\": \"/\" \"arg2\": 30 }\n";
-    std::cout << "  " << progName << " { \"arg1\": 20 \"operation\": \"!\" }\n";
+    std::cout << "  " << progName << " --in { \"arg1\": 20, \"operation\": \"/\", \"arg2\": 30 }\n";
+    std::cout << "  " << progName << " -i { \"arg1\": 20, \"operation\": \"!\" }\n";
     std::cout << "  " << progName << " --help | -h\n\n";
 
     std::cout << "Description:\n";
@@ -131,17 +131,17 @@ void CalculatorManager::print_help(const char *progName) const {
 
     std::cout << "Examples:\n";
     std::cout << "  " << progName
-              << " \t{ \"arg1\": 3 \"operation\": \"+\" \"arg2\": 5 }       \t-> Result: 8\n";
+              << " --in \t{ \"arg1\": 3, \"operation\": \"+\", \"arg2\": 5 }       \t-> Result: 8\n";
     std::cout << "  " << progName
-              << " \t{ \"arg1\": 3 \"operation\": \"-\" \"arg2\": 5 }       \t-> Result: 5\n";
+              << " --in \t{ \"arg1\": 3, \"operation\": \"-\", \"arg2\": 5 }       \t-> Result: 5\n";
     std::cout << "  " << progName
-              << " \t{ \"arg1\": 20 \"operation\": \"*\" \"arg2\": 2 }      \t-> Result: 40\n";
+              << " --in \t{ \"arg1\": 20, \"operation\": \"*\", \"arg2\": 2 }      \t-> Result: 40\n";
     std::cout << "  " << progName
-              << " \t{ \"arg1\": 10 \"operation\": \"/\" \"arg2\": 2 }      \t-> Result: 5\n";
+              << " --in \t{ \"arg1\": 10, \"operation\": \"/\", \"arg2\": 2 }      \t-> Result: 5\n";
     std::cout << "  " << progName
-              << " \t{ \"arg1\": 2 \"operation\": \"^\" \"arg2\": 2 }       \t-> Result: 4\n";
+              << " --in \t{ \"arg1\": 2, \"operation\": \"^\", \"arg2\": 2 }       \t-> Result: 4\n";
     std::cout << "  " << progName
-              << " \t{ \"arg1\": 5 \"operation\": \"!\"}                    \t-> Result: 120\n\n";
+              << " --in \t{ \"arg1\": 5, \"operation\": \"!\"}                     \t-> Result: 120\n\n";
 
     std::cout << "Options:\n";
     std::cout << "  -h, --help    Show this help message and exit\n";
