@@ -50,10 +50,22 @@ FetchContent_MakeAvailable(
         json
 )
 
+# library spdlog
+FetchContent_Declare(
+        spdlog
+        GIT_REPOSITORY https://github.com/gabime/spdlog.git
+        GIT_TAG v1.x
+)
+
+FetchContent_MakeAvailable(
+        spdlog
+)
+
 target_link_libraries(calculator_core 
         PUBLIC
         math
         nlohmann_json::nlohmann_json
+        spdlog::spdlog
 )
 
 add_executable(calculator_utility

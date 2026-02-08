@@ -1,4 +1,5 @@
 #include "CalculatorManager.h"
+#include "Logger.h"
 
 int main(int argc, char **argv) 
 {
@@ -9,6 +10,7 @@ int main(int argc, char **argv)
     }
     catch(const std::exception& ex)
     {
-        std::cerr << ex.what() << '\n';
+        Logger::instance().critical(ex.what());
+        std::cout << ex.what() << "\n";
     }
 }
