@@ -1,7 +1,7 @@
 #include "Printer.h"
 #include <iostream>
 
-void Printer::print_help(const std::string& progName) {
+void Printer::print_help(const std::string &progName) {
     std::cout << "Calculator CLI Utility — Help\n\n";
     std::cout << "Usage:\n";
     std::cout << "  " << progName << " --in { \"arg1\": 20, \"operation\": \"/\", \"arg2\": 30 }\n";
@@ -18,18 +18,24 @@ void Printer::print_help(const std::string& progName) {
     std::cout << "    !   factorial (recursive implementation)\n\n";
 
     std::cout << "Examples:\n";
-    std::cout << "  " << progName
-              << " --in \t{ \"arg1\": 3, \"operation\": \"+\", \"arg2\": 5 }       \t-> Result: 8\n";
-    std::cout << "  " << progName
-              << " --in \t{ \"arg1\": 3, \"operation\": \"-\", \"arg2\": 5 }       \t-> Result: 5\n";
-    std::cout << "  " << progName
-              << " --in \t{ \"arg1\": 20, \"operation\": \"*\", \"arg2\": 2 }      \t-> Result: 40\n";
-    std::cout << "  " << progName
-              << " --in \t{ \"arg1\": 10, \"operation\": \"/\", \"arg2\": 2 }      \t-> Result: 5\n";
-    std::cout << "  " << progName
-              << " --in \t{ \"arg1\": 2, \"operation\": \"^\", \"arg2\": 2 }       \t-> Result: 4\n";
-    std::cout << "  " << progName
-              << " --in \t{ \"arg1\": 5, \"operation\": \"!\"}                     \t-> Result: 120\n\n";
+    std::cout
+        << "  " << progName
+        << " --in \t{ \"arg1\": 3, \"operation\": \"+\", \"arg2\": 5 }       \t-> Result: 8\n";
+    std::cout
+        << "  " << progName
+        << " --in \t{ \"arg1\": 3, \"operation\": \"-\", \"arg2\": 5 }       \t-> Result: 5\n";
+    std::cout
+        << "  " << progName
+        << " --in \t{ \"arg1\": 20, \"operation\": \"*\", \"arg2\": 2 }      \t-> Result: 40\n";
+    std::cout
+        << "  " << progName
+        << " --in \t{ \"arg1\": 10, \"operation\": \"/\", \"arg2\": 2 }      \t-> Result: 5\n";
+    std::cout
+        << "  " << progName
+        << " --in \t{ \"arg1\": 2, \"operation\": \"^\", \"arg2\": 2 }       \t-> Result: 4\n";
+    std::cout
+        << "  " << progName
+        << " --in \t{ \"arg1\": 5, \"operation\": \"!\"}                     \t-> Result: 120\n\n";
 
     std::cout << "Options:\n";
     std::cout << "  -h, --help    Show this help message and exit\n";

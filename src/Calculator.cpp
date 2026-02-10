@@ -2,7 +2,7 @@
 #include "Logger.h"
 #include "library_math.h"
 
-double Calculator::calculate(const CalculationRequest& req) const {
+double Calculator::calculate(const CalculationRequest &req) const {
 
     double result{0.0};
 

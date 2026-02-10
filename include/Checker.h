@@ -2,8 +2,8 @@
 
 #include "CalculationRequest.h"
 
-class Checker{
-public:
+class Checker {
+  public:
     Checker() = default;
     ~Checker() = default;
     /**
@@ -11,5 +11,5 @@ public:
      *
      * @throws std::runtime_error if validation fails
      */
-    void validate_input(const CalculationRequest& req) const;
+    void validate_input(const CalculationRequest &req) const;
 };

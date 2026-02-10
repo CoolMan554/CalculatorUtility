@@ -3,9 +3,9 @@
 #include "CalculationRequest.h"
 
 class JsonInputParser {
-public:
+  public:
     JsonInputParser() = default;
     ~JsonInputParser() = default;
 
-    CalculationRequest parse(const std::string& input_data);
+    CalculationRequest parse(const std::string &input_data);
 };

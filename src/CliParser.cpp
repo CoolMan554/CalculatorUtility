@@ -1,10 +1,10 @@
 #include "CliParser.h"
-#include "Printer.h"
 #include "Logger.h"
+#include "Printer.h"
 
 #include <array>
 
-void CliParser::parse_arguments(int argc, char **argv){
+void CliParser::parse_arguments(int argc, char **argv) {
 
     // Resetting the counter
     optind = 1;
@@ -24,7 +24,7 @@ void CliParser::parse_arguments(int argc, char **argv){
             break;
         case 'i':
             if (optarg != nullptr) {
-                input_data = optarg;                
+                input_data = optarg;
             }
             break;
         case '?':

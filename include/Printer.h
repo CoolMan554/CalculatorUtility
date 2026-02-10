@@ -1,15 +1,14 @@
 #pragma once
 
-#include <string>
 #include <iostream>
+#include <string>
 
 class Printer {
-public:
+  public:
     /**
      * @brief Prints calculation result to stdout.
      */
-    template<typename T>
-    static void print(T result) {
+    template <typename T> static void print(T result) {
         std::cout << result << "\n";
     }
 
@@ -18,5 +17,5 @@ public:
      *
      * @param program_name Name of executable
      */
-    static void print_help(const std::string& progName);
+    static void print_help(const std::string &progName);
 };

@@ -1,7 +1,7 @@
 #include "Checker.h"
 #include "Logger.h"
 
-void Checker::validate_input(const CalculationRequest& req) const{
+void Checker::validate_input(const CalculationRequest &req) const {
 
     if (req.operation.empty())
         throw std::runtime_error("Function validate_input: Operation is empty");

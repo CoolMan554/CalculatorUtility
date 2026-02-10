@@ -4,7 +4,7 @@
 #include <string>
 
 class CliParser {
-public:
+  public:
     CliParser() = default;
     ~CliParser() = default;
 
@@ -21,7 +21,8 @@ public:
     std::string get_input_data() const {
         return input_data;
     }
-private:
+
+  private:
     bool show_help{false};
     std::string input_data;
 };

@@ -1,11 +1,11 @@
 #include "JsonInputParser.h"
-#include "nlohmann/json.hpp"
 #include "Logger.h"
+#include "nlohmann/json.hpp"
 
 // for convenience
 using json = nlohmann::json;
 
-CalculationRequest JsonInputParser::parse(const std::string& str){
+CalculationRequest JsonInputParser::parse(const std::string &str) {
 
     if (str.empty()) {
         throw std::runtime_error("Function JsonInputParser: There is no input data");

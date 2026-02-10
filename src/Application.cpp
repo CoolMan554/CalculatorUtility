@@ -1,11 +1,11 @@
 #include "Application.h"
+#include "Calculator.h"
+#include "Checker.h"
 #include "CliParser.h"
 #include "JsonInputParser.h"
-#include "Checker.h"
-#include "Calculator.h"
 #include "Printer.h"
 
-void Application::run(int argc, char** argv) {
+void Application::run(int argc, char **argv) {
     CliParser cli;
 
     cli.parse_arguments(argc, argv);
