@@ -42,6 +42,6 @@ Linux
 # Использование
  `calculator_utility --in | -i '{"arg1": <number1>, "operation": "<operation>", "arg2": "<number2>"}'`
   
-  `calculator_utility --in | -i '{"arg1": <number1>, "operation": "<operation>"}'`
-  
-  `calculator_utility --help | -h`
+ `calculator_utility --in | -i '{"arg1": <number1>, "operation": "<operation>"}'`
+ 
+ `calculator_utility --help | -h`
