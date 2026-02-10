@@ -5,7 +5,12 @@ include(FetchContent)
 project(calculator_utility VERSION 1.0)
 
 add_library(calculator_core
-        src/CalculatorManager.cpp
+        src/Application.cpp
+        src/Calculator.cpp
+        src/Checker.cpp
+        src/CliParser.cpp
+        src/JsonInputParser.cpp
+        src/Printer.cpp
 )
 
 target_include_directories(calculator_core 

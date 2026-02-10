@@ -5,7 +5,10 @@ include(FetchContent)
 project(g_tests VERSION 1.0)
 
 add_executable(g_tests
-        utest_CalculatorManager.cpp
+        utest_Calculator.cpp
+        utest_Checker.cpp
+        utest_CliParser.cpp
+        utest_JsonInputParser.cpp
 )
 
 # GoogleTest library
