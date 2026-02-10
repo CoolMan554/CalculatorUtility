@@ -9,7 +9,7 @@ class Printer {
      * @brief Prints calculation result to stdout.
      */
     template <typename T> static void print(T result) {
-        std::cout << result << "\n";
+        std::cout << "Result: " << result << "\n";
     }
 
     /**
