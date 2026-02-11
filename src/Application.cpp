@@ -6,23 +6,19 @@
 #include "Printer.h"
 
 void Application::run(int argc, char **argv) {
-    CliParser cli;
 
-    cli.parse_arguments(argc, argv);
+    cli_.parse_arguments(argc, argv);
 
-    if (cli.get_status_help()) {
+    if (cli_.get_status_help()) {
         Printer::print_help(argv[0]);
         return;
     }
 
-    JsonInputParser json_parser;
-    const auto req = json_parser.parse(cli.get_input_data());
+    auto req = json_parser_.parse(cli_.get_input_data());
 
-    Checker check;
-    check.validate_input(req);
+    check_.validate_input(req);
 
-    Calculator calc;
-    auto result = calc.calculate(req);
+    req.result = calc_.calculate(req);
 
-    Printer::print(result);
+    Printer::print(req);
 }

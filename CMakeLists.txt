@@ -11,6 +11,7 @@ add_library(calculator_core
         src/CliParser.cpp
         src/JsonInputParser.cpp
         src/Printer.cpp
+        src/Logger.cpp
 )
 
 target_include_directories(calculator_core 

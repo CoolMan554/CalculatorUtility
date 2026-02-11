@@ -1,6 +1,11 @@
 #include "Printer.h"
 #include <iostream>
 
+void Printer::print(const CalculationRequest &req) {
+    std::cout << req.first_argument << " " << req.operation << " " << req.second_argument << " = "
+              << req.result << "\n";
+}
+
 void Printer::print_help(const std::string &progName) {
     std::cout << "Calculator CLI Utility — Help\n\n";
     std::cout << "Usage:\n";

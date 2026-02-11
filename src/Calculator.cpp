@@ -6,7 +6,7 @@ double Calculator::calculate(const CalculationRequest &req) const {
 
     double result{0.0};
 
-    switch (req.operation[0]) {
+    switch (req.operation) {
     case '+':
         result = Library_Math::sum(req.first_argument, req.second_argument);
         break;

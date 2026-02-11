@@ -26,13 +26,19 @@ CalculationRequest JsonInputParser::parse(const std::string &str) {
         throw std::runtime_error("Function parse: The operation is missing!");
     }
 
-    req.operation = input_json.at("operation").get<std::string>();
+    std::string op_str = input_json.at("operation").get<std::string>();
 
-    if (req.operation != "!" && !input_json.contains("arg2") && input_json["arg2"].empty()) {
+    if (op_str.size() != 1) {
+        throw std::runtime_error("Operation must be a single character");
+    }
+
+    req.operation = op_str[0];
+
+    if (req.operation != '!' && !input_json.contains("arg2") && input_json["arg2"].empty()) {
         throw std::runtime_error("Function parse: The second argument is missing!");
     }
 
-    if (req.operation != "!") {
+    if (req.operation != '!') {
         req.second_argument = input_json.at("arg2").get<double>();
     }
 

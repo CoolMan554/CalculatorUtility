@@ -8,21 +8,24 @@
 
 class Logger {
   public:
-    static spdlog::logger &instance() {
-        static auto logger = [&] {
-            try {
-                return spdlog::basic_logger_st("calculator_utility", "calculator_utility.log");
-            } catch (...) {
-                return spdlog::stdout_color_st("calculator_utility_fallback");
-            }
-        }();
-        return *logger;
-    }
+    static Logger &instance();
+
+    Logger();
+    ~Logger() = default;
 
     Logger(const Logger &) = delete;
     Logger operator=(const Logger &) = delete;
 
+    Logger(Logger &&) noexcept = delete;
+    Logger operator=(Logger &&) noexcept = delete;
+
+    void error(const std::string &message);
+    void critical(const std::string &message);
+    void warn(const std::string &message);
+    void info(const std::string &message);
+    void debug(const std::string &message);
+
   private:
-    Logger() = default;
-    ~Logger() = default;
+    void log(spdlog::level::level_enum lvl, const std::string &message);
+    std::shared_ptr<spdlog::logger> logger{nullptr};
 };

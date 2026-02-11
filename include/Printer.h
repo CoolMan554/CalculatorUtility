@@ -3,14 +3,14 @@
 #include <iostream>
 #include <string>
 
+#include "CalculationRequest.h"
+
 class Printer {
   public:
     /**
      * @brief Prints calculation result to stdout.
      */
-    template <typename T> static void print(T result) {
-        std::cout << "Result: " << result << "\n";
-    }
+    static void print(const CalculationRequest &req);
 
     /**
      * @brief Prints help message.

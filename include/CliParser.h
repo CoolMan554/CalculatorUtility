@@ -8,6 +8,12 @@ class CliParser {
     CliParser() = default;
     ~CliParser() = default;
 
+    CliParser(const CliParser &) = default;
+    CliParser &operator=(const CliParser &) = default;
+
+    CliParser(CliParser &&) noexcept = default;
+    CliParser &operator=(CliParser &&) noexcept = default;
+
     /**
      * @brief Parses command-line arguments.
      *

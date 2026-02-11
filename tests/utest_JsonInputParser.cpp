@@ -7,7 +7,7 @@ TEST(JsonInputParser, Json_Parsing_Is_Successful) {
     auto req = jsP.parse(R"({ "arg1": 10, "operation": "+", "arg2": 10 })");
     EXPECT_EQ(10, req.first_argument);
     EXPECT_EQ(10, req.second_argument);
-    EXPECT_EQ("+", req.operation);
+    EXPECT_EQ('+', req.operation);
 }
 
 TEST(JsonInputParser, No_Arg1_Throw) {
