@@ -5,12 +5,8 @@ Logger &Logger::instance() {
     return logger;
 }
 
-Logger::Logger() {
-    try {
-        logger = spdlog::basic_logger_st("calculator_utility", "calculator_utility.log");
-    } catch (const spdlog::spdlog_ex &ex) {
-        std::cout << "Log init failed: " << ex.what() << "\n";
-    }
+Logger::Logger() {    
+    logger = spdlog::basic_logger_st("calculator_utility", "calculator_utility.log");
 }
 
 void Logger::log(spdlog::level::level_enum lvl, const std::string &message) {

@@ -14,10 +14,8 @@ int main(int argc, char **argv) {
                   << "exception id: " << e.id << '\n'
                   << "byte position of error: " << e.byte << "\n";
 
-        Logger::instance().critical(error_msg.str());
         std::cerr << error_msg.str() << "\n";
     } catch (const std::exception &ex) {
-        Logger::instance().critical(ex.what());
         std::cerr << ex.what() << "\n";
     }
 }
