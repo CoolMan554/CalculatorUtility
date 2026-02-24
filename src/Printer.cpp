@@ -1,7 +1,7 @@
 #include "Printer.h"
 #include <iostream>
 
-void Printer::print(const CalculationRequest &req) {
+void Printer::print(const OperationKey &req) {
     std::cout << req.first_argument << " " << req.operation << " " << req.second_argument << " = "
               << req.result << "\n";
 }

@@ -13,5 +13,5 @@ class JsonInputParser {
     JsonInputParser(JsonInputParser &&) noexcept = default;
     JsonInputParser &operator=(JsonInputParser &&) noexcept = default;
 
-    CalculationRequest parse(const std::string &input_data);
+    OperationKey parse(const std::string &input_data);
 };

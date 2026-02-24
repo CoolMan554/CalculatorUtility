@@ -4,6 +4,9 @@
 #include "Checker.h"
 #include "CliParser.h"
 #include "JsonInputParser.h"
+#include "IDatabase.h"
+
+#include <memory>
 
 class Application {
   public:
@@ -16,6 +19,8 @@ class Application {
     Application(Application &&) noexcept = default;
     Application &operator=(Application &&) noexcept = default;
 
+    void init();
+
     void run(int argc, char **argv);
 
   private:
@@ -23,4 +28,5 @@ class Application {
     JsonInputParser json_parser_;
     Checker check_;
     Calculator calc_;
+    std::unique_ptr<IDatabase> database_;
 };

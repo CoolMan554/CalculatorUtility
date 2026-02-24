@@ -12,11 +12,13 @@ add_library(calculator_core
         src/JsonInputParser.cpp
         src/Printer.cpp
         src/Logger.cpp
+        src/PostgreSqlDB.cpp
 )
 
 target_include_directories(calculator_core 
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        /usr/include/postgresql
 )
 
 # C++ standard (add --std=c++17)
@@ -72,6 +74,7 @@ target_link_libraries(calculator_core
         library_math
         nlohmann_json::nlohmann_json
         spdlog::spdlog
+        pq
 )
 
 add_executable(calculator_utility

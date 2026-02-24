@@ -4,13 +4,20 @@
 #include "CliParser.h"
 #include "JsonInputParser.h"
 #include "Printer.h"
+#include "PostgreSqlDB.h"
+
+void Application::init()
+{
+    database_ = std::make_unique<PostgreSqlDB>("localhost", 5432, "postgres", "909671Dima", "test1");
+
+    database_->initializeSchema();
+}
 
 void Application::run(int argc, char **argv) {
 
     cli_.parse_arguments(argc, argv);
 
-    if (cli_.get_status_help()) {
-        Printer::print_help(argv[0]);
+    if (cli_.get_status_help()) {        
         return;
     }
 

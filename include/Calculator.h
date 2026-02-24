@@ -16,5 +16,5 @@ class Calculator {
     /**
      * @brief Performs calculation based on parsed input.
      */
-    double calculate(const CalculationRequest &req) const;
+    double calculate(const OperationKey &req) const;
 };
