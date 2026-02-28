@@ -10,7 +10,7 @@ class Printer {
     /**
      * @brief Prints calculation result to stdout.
      */
-    static void print(const OperationKey &req);
+    static void print(const CalculationRequest &req);
 
     /**
      * @brief Prints help message.

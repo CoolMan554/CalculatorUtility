@@ -5,8 +5,10 @@
 #include "CliParser.h"
 #include "JsonInputParser.h"
 #include "IDatabase.h"
+#include "OperationRepository.h"
 
 #include <memory>
+#include <unordered_map>
 
 class Application {
   public:
@@ -29,4 +31,9 @@ class Application {
     Checker check_;
     Calculator calc_;
     std::unique_ptr<IDatabase> database_;
+    static inline std::unordered_map<OperationKey, double, OperationKeyHash> cache_{};    
+
+    void addToCache(const CalculationRequest& req, double result);
+    bool findInCache(const OperationKey& key, double& res);
+    void loadInCache();
 };

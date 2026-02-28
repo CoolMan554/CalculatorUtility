@@ -18,5 +18,5 @@ class Checker {
      *
      * @throws std::runtime_error if validation fails
      */
-    void validate_input(const OperationKey &req) const;
+    void validate_input(const CalculationRequest &req) const;
 };

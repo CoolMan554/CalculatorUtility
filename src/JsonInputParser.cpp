@@ -5,7 +5,7 @@
 // for convenience
 using json = nlohmann::json;
 
-OperationKey JsonInputParser::parse(const std::string &str) {
+CalculationRequest JsonInputParser::parse(const std::string &str) {
 
     if (str.empty()) {
         throw std::runtime_error("Function JsonInputParser: There is no input data");
@@ -13,7 +13,7 @@ OperationKey JsonInputParser::parse(const std::string &str) {
 
     json input_json = json::parse(str);
 
-    OperationKey req;
+    CalculationRequest req;
 
     if (!input_json.contains("arg1") && input_json["arg1"].empty()) {
         throw std::runtime_error("Function parse: The first argument is missing!");

@@ -12,7 +12,7 @@ add_library(calculator_core
         src/JsonInputParser.cpp
         src/Printer.cpp
         src/Logger.cpp
-        src/PostgreSqlDB.cpp
+        src/PostgreSqlDB.cpp     
 )
 
 target_include_directories(calculator_core 
