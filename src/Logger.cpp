@@ -5,7 +5,7 @@ Logger &Logger::instance() {
     return logger;
 }
 
-Logger::Logger() {    
+Logger::Logger() {
     logger = spdlog::basic_logger_st("calculator_utility", "calculator_utility.log");
 }
 
