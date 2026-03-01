@@ -13,7 +13,8 @@ add_library(calculator_core
         src/Printer.cpp
         src/Logger.cpp
         src/PostgreSqlDB.cpp
-        src/CacheManager.cpp  
+        src/CacheManager.cpp
+        src/DBConfig.cpp
 )
 
 target_include_directories(calculator_core 
@@ -63,12 +64,22 @@ FetchContent_MakeAvailable(
         spdlog
 )
 
+# psql
+
+find_package(PostgreSQL REQUIRED)
+
+if (PostgreSQL_FOUND)
+    include_directories(${PostgreSQL_INCLUDE_DIRS})
+    target_link_libraries(calculator_core PRIVATE ${PostgreSQL_LIBRARIES})
+else()
+    message(FATAL_ERROR "PostgreSQL library not found")
+endif()
+
 target_link_libraries(calculator_core 
         PUBLIC
         library_math
         nlohmann_json::nlohmann_json
         spdlog::spdlog
-        pq
 )
 
 add_executable(calculator_utility
@@ -133,3 +144,9 @@ if(ENABLE_CLANG_TIDY)
                 message(WARNING "clang-tidy not found!")
         endif()
 endif()
+
+configure_file(
+    ${CMAKE_SOURCE_DIR}/config/config_db.json
+    ${CMAKE_BINARY_DIR}/config/config_db.json
+    COPYONLY
+)

@@ -3,26 +3,21 @@
 
 #include <stdexcept>
 
-PostgreSqlDB::PostgreSqlDB(const std::string &server, int port, const std::string &user,
-                           const std::string &password, const std::string &database)
-    : server_(server), port_(port), user_(user), password_(password), database_(database) {
+PostgreSqlDB::PostgreSqlDB(const DBConfig& cfg) 
+    : connection_(nullptr, &PQfinish)
+{
+    if (cfg.getPort() == 0)
+        throw std::runtime_error("The port is specified incorrectly");
 
-    if (port_ == 0)
-        port_ = 5432;
+    std::string params = "host=" + cfg.getHost() + " port=" + std::to_string(cfg.getPort()) + " user=" + cfg.getUser() +
+                         " password=" + cfg.getPassword() + " dbname=" + cfg.getDBName();
 
-    std::string params = "host=" + server_ + " port=" + std::to_string(port) + " user=" + user +
-                         " password=" + password + " dbname=" + database;
+    connection_ = PGconnPtr(PQconnectdb(params.c_str()), &PQfinish);
 
-    connection_ = PQconnectdb(params.c_str());
-
-    if (PQstatus(connection_) != CONNECTION_OK) {
-        std::string error_msg = PQerrorMessage(connection_);
+    if (connection_ && PQstatus(connection_.get()) != CONNECTION_OK) {
+        std::string error_msg = PQerrorMessage(connection_.get());
         throw std::runtime_error("Connection to database failed: " + error_msg);
     }
-}
-
-PostgreSqlDB::~PostgreSqlDB() {
-    PQfinish(connection_);
 }
 
 PGresult *PostgreSqlDB::executeQuery(PGconn *conn, const std::string &query) {
@@ -49,7 +44,7 @@ void PostgreSqlDB::tryReconnect(PGconn *conn) {
     PQreset(conn);
 }
 
-bool PostgreSqlDB::checkAndHandleReconnect(PGconn *conn, PGresult *&res,
+bool PostgreSqlDB::checkAndHandleReconnect(PGconn *conn, PGresult *res,
                                            const std::function<PGresult *()> &executor) {
     if (!isConnectionBad(conn))
         return true;
@@ -57,13 +52,11 @@ bool PostgreSqlDB::checkAndHandleReconnect(PGconn *conn, PGresult *&res,
     tryReconnect(conn);
 
     if (isConnectionBad(conn)) {
-        PQclear(res);
         throw std::runtime_error("Lost connection to DB, unable to reconnect");
     }
 
     Logger::instance().info("Succesfully reconnected to DB");
 
-    PQclear(res);
     res = executor();
 
     return true;
@@ -90,16 +83,14 @@ bool PostgreSqlDB::checkSelectResult(PGconn *conn, PGresult *res) {
 }
 
 bool PostgreSqlDB::exec(const std::string &query) {
-    PGresult *res = executeQuery(connection_, query);
+    std::unique_ptr<PGresult, decltype(&PQclear)> res(executeQuery(connection_.get(), query), &PQclear);
 
-    checkAndHandleReconnect(connection_, res, [&]() { return executeQuery(connection_, query); });
+    checkAndHandleReconnect(connection_.get(), res.get(), [&]() { return executeQuery(connection_.get(), query); });
 
-    if (!checkCommandResult(connection_, res)) {
-        PQclear(res);
+    if (!checkCommandResult(connection_.get(), res.get())) {
         return false;
     }
 
-    PQclear(res);
     return true;
 }
 
@@ -108,52 +99,40 @@ bool PostgreSqlDB::exec_params(const std::string &query, const std::vector<std::
     for (const auto &value : values)
         c_values.push_back(value.c_str());
 
-    PGresult *res = executeQueryParams(connection_, query, values);
+    std::unique_ptr<PGresult, decltype(&PQclear)> res(executeQueryParams(connection_.get(), query, values), &PQclear);
 
-    checkAndHandleReconnect(connection_, res, [&]() { return executeQuery(connection_, query); });
+    checkAndHandleReconnect(connection_.get(), res.get(), [&]() { return executeQuery(connection_.get(), query); });
 
-    if (!checkCommandResult(connection_, res)) {
-        PQclear(res);
+    if (!checkCommandResult(connection_.get(), res.get())) {
         return false;
     }
 
-    PQclear(res);
     return true;
 }
 
 std::vector<CalculationRequest> PostgreSqlDB::exec_sel(const std::string &query) {
     std::vector<CalculationRequest> records;
 
-    PGresult *res = executeQuery(connection_, query);
+    std::unique_ptr<PGresult, decltype(&PQclear)> res(executeQuery(connection_.get(), query), &PQclear);
 
-    checkAndHandleReconnect(connection_, res, [&]() { return executeQuery(connection_, query); });
+    checkAndHandleReconnect(connection_.get(), res.get(), [&]() { return executeQuery(connection_.get(), query); });
 
-    if (PQresultStatus(res) != PGRES_TUPLES_OK) {
-        std::string error_msg = PQerrorMessage(connection_);
-        Logger::instance().error("Command failed: " + error_msg);
-        PQclear(res);
+    if (!checkSelectResult(connection_.get(), res.get())) {        
         return records;
     }
 
-    if (!checkSelectResult(connection_, res)) {
-        PQclear(res);
-        return records;
-    }
-
-    int rows = PQntuples(res);
+    int rows = PQntuples(res.get());
 
     for (int i = 0; i < rows; ++i) {
         CalculationRequest req;
 
-        req.operation = PQgetvalue(res, i, 0)[0];
-        req.first_argument = std::stod(PQgetvalue(res, i, 1));
-        req.second_argument = std::stod(PQgetvalue(res, i, 2));
-        req.result = std::stod(PQgetvalue(res, i, 3));
+        req.operation = PQgetvalue(res.get(), i, 0)[0];
+        req.first_argument = std::stod(PQgetvalue(res.get(), i, 1));
+        req.second_argument = std::stod(PQgetvalue(res.get(), i, 2));
+        req.result = std::stod(PQgetvalue(res.get(), i, 3));
 
         records.emplace_back(req);
     }
-
-    PQclear(res);
 
     return records;
 }
