@@ -7,6 +7,7 @@ using json = nlohmann::json;
 int main(int argc, char **argv) {
     try {
         Application app;
+        app.init();
         app.run(argc, argv);
     } catch (const json::parse_error &e) {
         std::ostringstream error_msg;

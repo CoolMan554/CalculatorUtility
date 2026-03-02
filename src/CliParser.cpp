@@ -20,6 +20,7 @@ void CliParser::parse_arguments(int argc, char **argv) {
     while ((opt = getopt_long(argc, argv, "hi:", long_opts.data(), nullptr)) != -1) {
         switch (opt) {
         case 'h':
+            Printer::print_help(argv[0]);
             show_help = true;
             break;
         case 'i':

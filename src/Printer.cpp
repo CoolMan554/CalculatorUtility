@@ -2,8 +2,12 @@
 #include <iostream>
 
 void Printer::print(const CalculationRequest &req) {
-    std::cout << req.first_argument << " " << req.operation << " " << req.second_argument << " = "
-              << req.result << "\n";
+    if (req.operation == '!')
+        std::cout << req.first_argument << " " << req.operation << " = " << req.result << "\n";
+    else {
+        std::cout << req.first_argument << " " << req.operation << " " << req.second_argument
+                  << " = " << req.result << "\n";
+    }
 }
 
 void Printer::print_help(const std::string &progName) {

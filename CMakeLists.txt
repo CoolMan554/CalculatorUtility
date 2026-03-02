@@ -12,11 +12,15 @@ add_library(calculator_core
         src/JsonInputParser.cpp
         src/Printer.cpp
         src/Logger.cpp
+        src/PostgreSqlDB.cpp
+        src/CacheManager.cpp
+        src/DBConfig.cpp
 )
 
 target_include_directories(calculator_core 
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        /usr/include/postgresql
 )
 
 # C++ standard (add --std=c++17)
@@ -25,13 +29,6 @@ target_compile_features(calculator_core PUBLIC cxx_std_17)
 set_target_properties(calculator_core PROPERTIES
     CXX_STANDARD_REQUIRED YES #lowering the standard NO
     CXX_EXTENSIONS NO #banning GNU-CLANG extensions
-)
-
-# Compiler warnings
-target_compile_options(calculator_core PRIVATE
-    -Wall
-    -Wextra
-    -Wpedantic
 )
 
 # Dependencies
@@ -67,6 +64,17 @@ FetchContent_MakeAvailable(
         spdlog
 )
 
+# psql
+
+find_package(PostgreSQL REQUIRED)
+
+if (PostgreSQL_FOUND)
+    include_directories(${PostgreSQL_INCLUDE_DIRS})
+    target_link_libraries(calculator_core PRIVATE ${PostgreSQL_LIBRARIES})
+else()
+    message(FATAL_ERROR "PostgreSQL library not found")
+endif()
+
 target_link_libraries(calculator_core 
         PUBLIC
         library_math
@@ -81,6 +89,14 @@ add_executable(calculator_utility
 target_link_libraries(calculator_utility 
         PRIVATE
         calculator_core
+)
+
+# Compiler warnings
+target_compile_options(calculator_utility PRIVATE
+    -Wall
+    -Wextra
+    -Wpedantic    
+    -fno-omit-frame-pointer #perf
 )
 
 # Tests
@@ -128,3 +144,9 @@ if(ENABLE_CLANG_TIDY)
                 message(WARNING "clang-tidy not found!")
         endif()
 endif()
+
+configure_file(
+    ${CMAKE_SOURCE_DIR}/config/config_db.json
+    ${CMAKE_BINARY_DIR}/config/config_db.json
+    COPYONLY
+)
