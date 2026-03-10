@@ -17,3 +17,14 @@ DBConfig::DBConfig(const std::string& path){
     password = j["database"]["password"];
     dbname = j["database"]["dbname"];
 }
+
+std::string DBConfig::findConfig()
+{
+    if (std::filesystem::exists("./config/config_db.json"))
+        return "./config/config_db.json";
+
+    if (std::filesystem::exists("/etc/calculator_utility/config_db.json"))
+        return "/etc/calculator_utility/config_db.json";
+
+    throw std::runtime_error("Config file not found");
+}

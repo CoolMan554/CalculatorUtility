@@ -142,7 +142,7 @@ void PostgreSqlDB::initializeSchema() {
                       "id SERIAL PRIMARY KEY, "
                       "operation_type CHAR(1) NOT NULL, "
                       "arg1 DOUBLE PRECISION NOT NULL, "
-                      "arg2 DOUBLE PRECISION, "
+                      "arg2 DOUBLE PRECISION NOT NULL, "
                       "result DOUBLE PRECISION NOT NULL, "
                       "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
                       ");"};

@@ -110,6 +110,10 @@ install(TARGETS calculator_utility
         RUNTIME DESTINATION /usr/local/bin/
 )
 
+install(FILES config/config_db.json
+        DESTINATION /etc/calculator_utility
+)
+
 #clang-format
 
 option(ENABLE_CLANG_FORMAT "Run clang-format" OFF)

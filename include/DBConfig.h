@@ -5,6 +5,8 @@
 struct DBConfig{
     DBConfig(const std::string& path);
 
+    static std::string findConfig();
+
     std::string getHost() const{
         return host;
     }

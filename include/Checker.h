@@ -16,7 +16,7 @@ class Checker {
     /**
      * @brief Validates parsed input data.
      *
-     * @throws std::runtime_error if validation fails
+     * @return success or not a success
      */
-    void validate_input(const CalculationRequest &req) const;
+    bool validate_input(const CalculationRequest &req) const;
 };

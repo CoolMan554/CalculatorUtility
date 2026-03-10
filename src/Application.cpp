@@ -9,7 +9,7 @@
 
 void Application::init() {
 
-    DBConfig conf("config/config_db.json");
+    DBConfig conf(DBConfig::findConfig());
 
     database_ = std::make_unique<PostgreSqlDB>(conf);
 
@@ -34,13 +34,22 @@ void Application::run(int argc, char **argv) {
     } else {
         std::string opStr(1, req.operation);
 
-        database_->insert(database_->TABLE_DATABASE, {"operation_type", "arg1", "arg2", "result"},
-                          {opStr, std::to_string(req.first_argument),
-                           std::to_string(req.second_argument), std::to_string(req.result)});
+        if (!check_.validate_input(req))
+        {
+            database_->insert(database_->TABLE_DATABASE, {"operation_type", "arg1", "arg2", "result"},
+                        {opStr, std::to_string(req.first_argument),
+                        std::to_string(req.second_argument), std::to_string(req.result)});
 
-        check_.validate_input(req);
+            cache_m.addToCache(req, 0.0);
+
+            throw std::runtime_error("Function validate_input: You can't divided by zero!");
+        }
 
         req.result = calc_.calculate(req);
+
+        database_->insert(database_->TABLE_DATABASE, {"operation_type", "arg1", "arg2", "result"},
+                        {opStr, std::to_string(req.first_argument),
+                        std::to_string(req.second_argument), std::to_string(req.result)});
 
         cache_m.addToCache(req, req.result);
 
