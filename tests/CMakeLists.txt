@@ -29,4 +29,4 @@ target_link_libraries(g_tests
 )
 
 include(GoogleTest)
-gtest_discover_tests(g_tests)
+gtest_add_tests(TARGET g_tests)

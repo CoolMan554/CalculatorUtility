@@ -6,9 +6,14 @@
 #include "CliParser.h"
 #include "IDatabase.h"
 #include "JsonInputParser.h"
+#include "CalculationRequest.h"
 
 #include <memory>
 #include <unordered_map>
+#include <queue>
+#include <mutex>
+#include <condition_variable>
+#include <atomic>
 
 class Application {
   public:
@@ -25,6 +30,9 @@ class Application {
 
     void run(int argc, char **argv);
 
+    void signalLoop();
+    void processRequest(CalculationRequest req);
+
   private:
     CliParser cli_;
     JsonInputParser json_parser_;
@@ -32,4 +40,5 @@ class Application {
     Calculator calc_;
     CacheManager cache_m;
     std::unique_ptr<IDatabase> database_;
+    std::atomic<bool> running_{true};
 };

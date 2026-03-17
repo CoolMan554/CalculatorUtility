@@ -4,6 +4,21 @@ include(FetchContent)
 
 project(calculator_utility VERSION 1.0)
 
+option(ENABLE_TSAN "Enable ThreadSanitizer" OFF)
+
+if(ENABLE_TSAN)
+    add_compile_options(
+        -fsanitize=thread
+        -fno-omit-frame-pointer        
+        -g
+        -O1
+    )
+
+    add_link_options(
+        -fsanitize=thread        
+    )
+endif()
+
 add_library(calculator_core
         src/Application.cpp
         src/Calculator.cpp
@@ -57,7 +72,7 @@ FetchContent_MakeAvailable(
 FetchContent_Declare(
         spdlog
         GIT_REPOSITORY https://github.com/gabime/spdlog.git
-        GIT_TAG v1.x
+        GIT_TAG v1.17.0
 )
 
 FetchContent_MakeAvailable(
@@ -112,6 +127,11 @@ install(TARGETS calculator_utility
 
 install(FILES config/config_db.json
         DESTINATION /etc/calculator_utility
+)
+
+install(FILES 
+        ${CMAKE_SOURCE_DIR}/service/systemd/calculator_utility.service
+        DESTINATION /etc/systemd/system
 )
 
 #clang-format

@@ -7,6 +7,8 @@
 #include "Printer.h"
 #include "DBConfig.h"
 
+#include <signal.h>
+
 void Application::init() {
 
     DBConfig conf(DBConfig::findConfig());
@@ -20,18 +22,43 @@ void Application::init() {
 
 void Application::run(int argc, char **argv) {
 
-    cli_.parse_arguments(argc, argv);
+    while(running_)
+    {   
+        cli_.parse_arguments(argc, argv);
 
-    if (cli_.get_status_help()) {
-        return;
+        if (cli_.get_status_help()) {
+            return;
+        }
+
+        auto req = json_parser_.parse(cli_.get_input_data());
+
+        processRequest(req);
     }
+}
 
-    auto req = json_parser_.parse(cli_.get_input_data());
+void Application::signalLoop()
+{
+    sigset_t set;
+    sigemptyset(&set);
 
+    sigaddset(&set, SIGINT);
+    sigaddset(&set, SIGTERM);
+
+    int sig;
+    sigwait(&set, &sig);
+
+    running_ = false;
+}
+
+
+void Application::processRequest(CalculationRequest req)
+{
     if (cache_m.findInCache(req, req.result)) {
         check_.validate_input(req);
-        Printer::print(req);
-    } else {
+        Printer::print(req); 
+    } 
+    else 
+    {
         std::string opStr(1, req.operation);
 
         if (!check_.validate_input(req))
