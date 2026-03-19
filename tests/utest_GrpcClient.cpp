@@ -14,7 +14,7 @@ protected:
 
         auto deadline = std::chrono::system_clock::now() + std::chrono::seconds(3);
 
-        return channel->WaitForConnected(deadline);
+        return channel->WaitForConnected(deadline); //smart waiting cycle
     }
 };
 

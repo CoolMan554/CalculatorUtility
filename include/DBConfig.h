@@ -2,33 +2,33 @@
 
 #include <string>
 
-struct DBConfig{
-    DBConfig(const std::string& path);
+struct DBConfig {
+    DBConfig(const std::string &path);
 
     static std::string findConfig();
 
-    std::string getHost() const{
+    std::string getHost() const {
         return host;
     }
 
-    int getPort() const{
+    int getPort() const {
         return port;
     }
 
-    std::string getUser() const{
+    std::string getUser() const {
         return user;
     }
 
-    std::string getPassword() const{
+    std::string getPassword() const {
         return password;
     }
 
-    std::string getDBName() const{
+    std::string getDBName() const {
         return dbname;
     }
-    
-private:
-    std::string host;    
+
+  private:
+    std::string host;
     int port = 0;
     std::string user;
     std::string password;

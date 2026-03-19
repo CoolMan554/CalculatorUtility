@@ -2,13 +2,12 @@
 
 #include "Printer.h"
 
-
-CalculatorClient::CalculatorClient(std::shared_ptr<grpc::Channel> channel) : stub_(CalculatorService::NewStub(channel)) 
-{
-
+CalculatorClient::CalculatorClient(std::shared_ptr<grpc::Channel> channel)
+    : stub_(CalculatorService::NewStub(channel)) {
 }
 
-double CalculatorClient::Compute(const double arg1, const std::string& operation, const double arg2) {
+double CalculatorClient::Compute(const double arg1, const std::string &operation,
+                                 const double arg2) {
     CalcRequest req;
     req.set_arg1(arg1);
     req.set_arg2(arg2);

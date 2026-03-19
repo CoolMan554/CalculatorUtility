@@ -1,8 +1,8 @@
 #include "DBConfig.h"
-#include <fstream>
 #include "nlohmann/json.hpp"
+#include <fstream>
 
-DBConfig::DBConfig(const std::string& path){
+DBConfig::DBConfig(const std::string &path) {
     std::ifstream file(path);
     if (!file) {
         throw std::runtime_error("Cannot open config file");
@@ -18,8 +18,7 @@ DBConfig::DBConfig(const std::string& path){
     dbname = j["database"]["dbname"];
 }
 
-std::string DBConfig::findConfig()
-{
+std::string DBConfig::findConfig() {
     if (std::filesystem::exists("./config/config_db.json"))
         return "./config/config_db.json";
 

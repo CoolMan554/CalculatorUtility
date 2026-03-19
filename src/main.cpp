@@ -2,13 +2,12 @@
 #include "Logger.h"
 #include "nlohmann/json.hpp"
 
-#include <thread>
 #include <signal.h>
+#include <thread>
 
 using json = nlohmann::json;
 
-void signalInit()
-{
+void signalInit() {
     sigset_t set;
     sigemptyset(&set);
 
@@ -27,37 +26,33 @@ int main(int argc, char **argv) {
 
         app.init();
 
-        std::thread signal_thread([&app](){
+        std::thread signal_thread([&app]() {
             try {
                 app.signalLoop();
-            }
-            catch (const std::exception &ex){
+            } catch (const std::exception &ex) {
                 std::cerr << ex.what() << "\n";
             }
         });
-        
-        std::thread worker_thread([&](){
-            try{
+
+        std::thread worker_thread([&]() {
+            try {
                 app.run(argc, argv);
-            }
-            catch (const json::parse_error &e) {
+            } catch (const json::parse_error &e) {
                 std::ostringstream error_msg;
                 error_msg << "JSON parsing Error: " << "message: " << e.what() << '\n'
-                        << "exception id: " << e.id << '\n'
-                        << "byte position of error: " << e.byte << "\n";
+                          << "exception id: " << e.id << '\n'
+                          << "byte position of error: " << e.byte << "\n";
 
                 std::cerr << error_msg.str() << "\n";
-            } 
-            catch (const std::exception &ex) {
+            } catch (const std::exception &ex) {
                 std::cerr << ex.what() << "\n";
             }
         });
 
         signal_thread.join();
         worker_thread.join();
-    
-    }
-    catch (const std::exception &ex) {
+
+    } catch (const std::exception &ex) {
         std::cerr << ex.what() << "\n";
     }
 }

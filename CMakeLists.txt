@@ -78,7 +78,7 @@ FetchContent_MakeAvailable(
         spdlog
 )
 
-# # gRPC
+# # gRPC It's too long to wait
 
 # FetchContent_Declare(
 #     grpc
@@ -198,13 +198,6 @@ target_compile_options(calculator_server PRIVATE
     -fno-omit-frame-pointer #perf
 )
 
-# target_compile_options(calculator_client PRIVATE
-#     -Wall
-#     -Wextra
-#     -Wpedantic    
-#     -fno-omit-frame-pointer #perf
-# )
-
 # Tests
 enable_testing()
 add_subdirectory(tests)
@@ -265,3 +258,10 @@ configure_file(
     ${CMAKE_BINARY_DIR}/config/config_db.json
     COPYONLY
 )
+
+#port Server
+
+set(GRPC_SERVER_PORT 50051 CACHE STRING "Port for gRPC server")
+
+add_definitions(-DGRPC_SERVER_PORT=${GRPC_SERVER_PORT})
+message(STATUS "gRPC Server will run on port: ${GRPC_SERVER_PORT}")

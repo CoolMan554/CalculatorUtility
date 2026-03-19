@@ -1,6 +1,6 @@
 #include <grpcpp/grpcpp.h>
-#include <signal.h>
 #include <iostream>
+#include <signal.h>
 #include <thread>
 
 #include "calculator.grpc.pb.h"
@@ -13,21 +13,19 @@ using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::Status;
 
-using calculator::CalculatorService;
 using calculator::CalcRequest;
 using calculator::CalcResponse;
+using calculator::CalculatorService;
 
-class CalculatorServiceImpl final : public CalculatorService::Service
-{
-public:
+class CalculatorServiceImpl final : public CalculatorService::Service {
+  public:
     CalculatorServiceImpl() {
         app_.init();
     }
 
-    Status Compute(ServerContext* context, const CalcRequest* request, CalcResponse* response) override
-    {
-        try
-        {
+    Status Compute(ServerContext *context, const CalcRequest *request,
+                   CalcResponse *response) override {
+        try {
             CalculationRequest req;
 
             req.first_argument = request->arg1();
@@ -44,19 +42,16 @@ public:
             response->set_result(req.result);
 
             return Status::OK;
-        }
-        catch(const std::exception& e)
-        {
+        } catch (const std::exception &e) {
             return Status(grpc::StatusCode::INTERNAL, e.what());
         }
-        
     }
-private:
+
+  private:
     Application app_;
 };
 
-void signalInit()
-{
+void signalInit() {
     sigset_t set;
     sigemptyset(&set);
 
@@ -66,8 +61,7 @@ void signalInit()
     pthread_sigmask(SIG_BLOCK, &set, nullptr);
 }
 
-void signalHandler(grpc::Server* server)
-{
+void signalHandler(grpc::Server *server) {
     sigset_t set;
     sigemptyset(&set);
 
@@ -80,9 +74,8 @@ void signalHandler(grpc::Server* server)
     server->Shutdown();
 }
 
-void RunServer()
-{
-    std::string address("0.0.0.0:50051");
+void RunServer() {
+    std::string address = "0.0.0.0:" + std::to_string(GRPC_SERVER_PORT);
 
     CalculatorServiceImpl service;
 
@@ -92,8 +85,7 @@ void RunServer()
 
     auto serverRun = builder.BuildAndStart();
 
-    if (serverRun)
-    {
+    if (serverRun) {
         std::unique_ptr<Server> server(std::move(serverRun));
 
         std::thread sigThread(signalHandler, server.get());
@@ -103,20 +95,16 @@ void RunServer()
         server->Wait();
 
         sigThread.join();
-    }
-    else {
-        std::cout << "The server is not running" << "\n";
+    } else {
+        throw std::runtime_error("The server is not running");
     }
 }
 
-int main()
-{
-    try 
-    {
+int main() {
+    try {
         signalInit();
         RunServer();
-    }
-    catch (const std::exception &ex) {
+    } catch (const std::exception &ex) {
         std::cerr << ex.what() << "\n";
     }
 }

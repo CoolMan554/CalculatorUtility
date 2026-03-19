@@ -1,19 +1,19 @@
 #pragma once
 
 #include "CacheManager.h"
+#include "CalculationRequest.h"
 #include "Calculator.h"
 #include "Checker.h"
 #include "CliParser.h"
 #include "IDatabase.h"
 #include "JsonInputParser.h"
-#include "CalculationRequest.h"
 
-#include <memory>
-#include <unordered_map>
-#include <queue>
-#include <mutex>
-#include <condition_variable>
 #include <atomic>
+#include <condition_variable>
+#include <memory>
+#include <mutex>
+#include <queue>
+#include <unordered_map>
 
 class Application {
   public:
@@ -31,7 +31,7 @@ class Application {
     void run(int argc, char **argv);
 
     void signalLoop();
-    void processRequest(CalculationRequest& req);
+    void processRequest(CalculationRequest &req);
 
   private:
     CliParser cli_;
