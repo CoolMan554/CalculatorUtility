@@ -9,6 +9,7 @@ add_executable(g_tests
         utest_Checker.cpp
         utest_CliParser.cpp
         utest_JsonInputParser.cpp
+        utest_GrpcClient.cpp
 )
 
 # GoogleTest library

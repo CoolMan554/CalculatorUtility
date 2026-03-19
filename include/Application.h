@@ -31,7 +31,7 @@ class Application {
     void run(int argc, char **argv);
 
     void signalLoop();
-    void processRequest(CalculationRequest req);
+    void processRequest(CalculationRequest& req);
 
   private:
     CliParser cli_;

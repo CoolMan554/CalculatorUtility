@@ -51,7 +51,7 @@ void Application::signalLoop()
 }
 
 
-void Application::processRequest(CalculationRequest req)
+void Application::processRequest(CalculationRequest& req)
 {
     if (cache_m.findInCache(req, req.result)) {
         check_.validate_input(req);
