@@ -1,19 +1,19 @@
 #pragma once
 
 #include "CalculationRequest.h"
-#include "IDatabase.h"
 #include "DBConfig.h"
+#include "IDatabase.h"
 
 #include <functional>
 #include <libpq-fe.h>
-#include <string>
 #include <memory>
+#include <string>
 
 using PGconnPtr = std::unique_ptr<PGconn, decltype(&PQfinish)>;
 
 class PostgreSqlDB : public IDatabase {
   public:
-    PostgreSqlDB(const DBConfig& cfg);
+    PostgreSqlDB(const DBConfig &cfg);
     ~PostgreSqlDB() = default;
 
     PostgreSqlDB(const PostgreSqlDB &) = default;

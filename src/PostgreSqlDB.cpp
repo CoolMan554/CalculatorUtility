@@ -3,14 +3,13 @@
 
 #include <stdexcept>
 
-PostgreSqlDB::PostgreSqlDB(const DBConfig& cfg) 
-    : connection_(nullptr, &PQfinish)
-{
+PostgreSqlDB::PostgreSqlDB(const DBConfig &cfg) : connection_(nullptr, &PQfinish) {
     if (cfg.getPort() == 0)
         throw std::runtime_error("The port is specified incorrectly");
 
-    std::string params = "host=" + cfg.getHost() + " port=" + std::to_string(cfg.getPort()) + " user=" + cfg.getUser() +
-                         " password=" + cfg.getPassword() + " dbname=" + cfg.getDBName();
+    std::string params = "host=" + cfg.getHost() + " port=" + std::to_string(cfg.getPort()) +
+                         " user=" + cfg.getUser() + " password=" + cfg.getPassword() +
+                         " dbname=" + cfg.getDBName();
 
     connection_ = PGconnPtr(PQconnectdb(params.c_str()), &PQfinish);
 
@@ -83,9 +82,11 @@ bool PostgreSqlDB::checkSelectResult(PGconn *conn, PGresult *res) {
 }
 
 bool PostgreSqlDB::exec(const std::string &query) {
-    std::unique_ptr<PGresult, decltype(&PQclear)> res(executeQuery(connection_.get(), query), &PQclear);
+    std::unique_ptr<PGresult, decltype(&PQclear)> res(executeQuery(connection_.get(), query),
+                                                      &PQclear);
 
-    checkAndHandleReconnect(connection_.get(), res.get(), [&]() { return executeQuery(connection_.get(), query); });
+    checkAndHandleReconnect(connection_.get(), res.get(),
+                            [&]() { return executeQuery(connection_.get(), query); });
 
     if (!checkCommandResult(connection_.get(), res.get())) {
         return false;
@@ -99,9 +100,11 @@ bool PostgreSqlDB::exec_params(const std::string &query, const std::vector<std::
     for (const auto &value : values)
         c_values.push_back(value.c_str());
 
-    std::unique_ptr<PGresult, decltype(&PQclear)> res(executeQueryParams(connection_.get(), query, values), &PQclear);
+    std::unique_ptr<PGresult, decltype(&PQclear)> res(
+        executeQueryParams(connection_.get(), query, values), &PQclear);
 
-    checkAndHandleReconnect(connection_.get(), res.get(), [&]() { return executeQuery(connection_.get(), query); });
+    checkAndHandleReconnect(connection_.get(), res.get(),
+                            [&]() { return executeQuery(connection_.get(), query); });
 
     if (!checkCommandResult(connection_.get(), res.get())) {
         return false;
@@ -113,11 +116,13 @@ bool PostgreSqlDB::exec_params(const std::string &query, const std::vector<std::
 std::vector<CalculationRequest> PostgreSqlDB::exec_sel(const std::string &query) {
     std::vector<CalculationRequest> records;
 
-    std::unique_ptr<PGresult, decltype(&PQclear)> res(executeQuery(connection_.get(), query), &PQclear);
+    std::unique_ptr<PGresult, decltype(&PQclear)> res(executeQuery(connection_.get(), query),
+                                                      &PQclear);
 
-    checkAndHandleReconnect(connection_.get(), res.get(), [&]() { return executeQuery(connection_.get(), query); });
+    checkAndHandleReconnect(connection_.get(), res.get(),
+                            [&]() { return executeQuery(connection_.get(), query); });
 
-    if (!checkSelectResult(connection_.get(), res.get())) {        
+    if (!checkSelectResult(connection_.get(), res.get())) {
         return records;
     }
 
@@ -142,7 +147,7 @@ void PostgreSqlDB::initializeSchema() {
                       "id SERIAL PRIMARY KEY, "
                       "operation_type CHAR(1) NOT NULL, "
                       "arg1 DOUBLE PRECISION NOT NULL, "
-                      "arg2 DOUBLE PRECISION, "
+                      "arg2 DOUBLE PRECISION NOT NULL, "
                       "result DOUBLE PRECISION NOT NULL, "
                       "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
                       ");"};

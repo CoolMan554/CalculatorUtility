@@ -1,13 +1,18 @@
 #pragma once
 
 #include "CacheManager.h"
+#include "CalculationRequest.h"
 #include "Calculator.h"
 #include "Checker.h"
 #include "CliParser.h"
 #include "IDatabase.h"
 #include "JsonInputParser.h"
 
+#include <atomic>
+#include <condition_variable>
 #include <memory>
+#include <mutex>
+#include <queue>
 #include <unordered_map>
 
 class Application {
@@ -25,6 +30,9 @@ class Application {
 
     void run(int argc, char **argv);
 
+    void signalLoop();
+    void processRequest(CalculationRequest &req);
+
   private:
     CliParser cli_;
     JsonInputParser json_parser_;
@@ -32,4 +40,5 @@ class Application {
     Calculator calc_;
     CacheManager cache_m;
     std::unique_ptr<IDatabase> database_;
+    std::atomic<bool> running_{true};
 };

@@ -40,8 +40,13 @@ Linux
 После установки бинарный файл доступен по пути: `/usr/local/bin/`
 
 # Использование
- `calculator_utility --in | -i '{"arg1": <number1>, "operation": "<operation>", "arg2": "<number2>"}'`
-  
- `calculator_utility --in | -i '{"arg1": <number1>, "operation": "<operation>"}'`
- 
- `calculator_utility --help | -h`
+
+Настраиваем сервис: 
+
+ `sudo systemctl enable calculator_server.service`
+ `sudo systemctl start calculator_server.service`
+
+Сервер использует порт (по умолчанию): 50051
+Можно указать другой при конфигурации проекта командой: `cmake -B build -DGRPC_SERVER_PORT=60000`
+
+Для настройки клиента можно использовать за основу файл: `src/grpc/GrpcClient.cpp`
